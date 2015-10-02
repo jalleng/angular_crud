@@ -30,6 +30,7 @@ module.exports = function(app) {
 
     $scope.cancelUpdate = function(word) {
       word.wordBody = word.old;
+      word.editing = false;
     };
 
     $scope.saveWord = function(word) {
