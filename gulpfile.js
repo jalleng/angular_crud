@@ -1,5 +1,3 @@
-'use strict';
-
 var gulp = require('gulp');
 var mocha = require('gulp-mocha');
 var webpack = require('webpack-stream');
@@ -38,20 +36,20 @@ gulp.task('servertests', function() {
       process.exit(1);
     })
     .once('end', function() {
-      if(this.seq.length === 1 && this.seq[0] === 'servertests')
+      if (this.seq.length === 1 && this.seq[0] === 'servertests')
         process.exit();
     }.bind(this));
 });
 
 gulp.task('karmatests', ['webpack:test'], function(done) {
   new Karma({
-    configFile:__dirname + '/karma.conf.js'
+    configFile: __dirname + '/karma.conf.js'
   }, done).start();
 });
 
-gulp.task('watch', function() {
-  return gulp.watch(['./app/js/client.js', './app/**/*.html'], ['build:dev']);
-});
+// gulp.task('watch', function() {
+//   return gulp.watch(['./app/js/client.js', './app/**/*.html'], ['build:dev']);
+// });
 
 
 gulp.task('build:dev', ['staticfiles:dev', 'webpack:dev']);

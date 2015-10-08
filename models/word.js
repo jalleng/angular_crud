@@ -1,5 +1,3 @@
-'use strict';
-
 var mongoose = require('mongoose');
 var wordSchema = new mongoose.Schema({
   author: {type: String, default: 'Anonymous'},

@@ -1,9 +1,8 @@
-'use strict';
-
 var Word = require(__dirname + '/../models/word');
 var express = require('express');
 var jsonParser = require('body-parser').json();
 var handleError = require(__dirname + '/../lib/handle_error');
+
 var wordsRoute = module.exports = exports = express.Router();
 
 wordsRoute.get('/words', function(req, res) {

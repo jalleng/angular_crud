@@ -9,6 +9,6 @@ var wordsRouter = require(__dirname + '/routes/words_routes');
 app.use('/api', wordsRouter);
 
 var port = process.env.PORT || 3000;
-app.listen(port, function() {
+module.exports = app.listen(port, function() {
   console.log('server up on port: ' + port);
 });

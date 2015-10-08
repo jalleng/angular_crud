@@ -6,13 +6,15 @@
 </head>
 <body data-ng-app="wordsApp">
   <main data-ng-controller="WordsController" data-ng-init="getAll()">
-    <h1>Words App:</h1>
-    <form name="newWordForm" data-ng-submit="createWord(newWord)">
-      <label for="wordBody">New Word:
-        <input type="text" required data-ng-model="newWord.wordBody">
-      </label>
-      <button type="submit" data-ng-disabled="newWordForm.$invalid">Create New Word</button>
-    </form>
+    <div data-bobsled title="Words App">
+      {{description}}
+    </div>
+
+    <div data-word-form save="createWord(word)"
+         data-word="newWord"
+         data-label-text="New Word"
+         data-button-text="Create Word">
+    </div>
 
     <ul id="wordslist">
       <li class="{{word.status}}" data-ng-repeat="word in words">
@@ -20,13 +22,25 @@
           <button data-ng-click="beginUpdate(word)">Edit</button>
           <button data-ng-click="removeWord(word)">Delete</button>
         </span>
-        <form data-ng-if="word.editing" name="{{'wordForm' + word._id}}" data-ng-submit="saveWord(word)">
+
+        <div data-word-form
+             data-ng-if="word.editing"
+             data-label-text="Edit Word"
+             data-button-text="Save Changes"
+             data-word="word"
+             data-save="saveWord(word)">
+        </div>
+        <button type="button" data-ng-if="word.editing" data-ng-click="cancelUpdate(word)">Cancel</button>
+
+
+       <!--  <form data-ng-if="word.editing" name="{{'wordForm' + word._id}}" data-ng-submit="saveWord(word)">
           <input type="text" data-ng-model="word.wordBody">
           <button type="submit" data-ng-disabled="word.editing.$invalid">Save Changes</button>
           <button type="button" data-ng-click="cancelUpdate(word)">Cancel</button>
-        </form>
+        </form> -->
       </li>
     </ul>
+
   </main>
   <script src="bundle.js"></script>
 </body>
