@@ -48,21 +48,22 @@ describe('words controller', function() {
       expect($scope.newWord).toBe('');
     });
 
-    // it('should remove a word', function() {
-    //   $scope.words.push({_id: 5, wordBody: 'My word'});
-    //   $httpBackend.expectDELETE('/api/words/5').respond(200);
-    //   $scope.removeWord($scope.words[0]);
-    //   $httpBackend.flush();
-    //   expect($scope.words.length).toBe(0);
-    // });
+    it('should remove a word', function() {
+      $scope.words.push({_id: 5, wordBody: 'My word'});
+      $httpBackend.expectDELETE('/api/words/5').respond(200);
+      $scope.removeWord($scope.words[0]);
+      $httpBackend.flush();
+      expect($scope.words.length).toBe(0);
+    });
 
-    // it('should update a word', function() {
-    //   $scope.words.push({_id: 5, wordBody: 'My word'});
-    //   $httpBackend.expectPUT('/api/words/5', {_id: 5, wordBody: 'My word', status: 'pending'}).respond(200);
-    //   $scope.saveWord($scope.words[0]);
-    //   $httpBackend.flush();
-    //   expect($scope.words[0].wordBody).toBe('My word');
-    // });
+    it('should update a word', function() {
+      $scope.words.push({_id: 6, wordBody: 'My word'});
+      console.log('words', $scope.words);
+      $httpBackend.expectPUT('/api/words/6', {_id: 6, wordBody: 'My word', status: 'pending'}).respond(200);
+      $scope.saveWord($scope.words[0]);
+      $httpBackend.flush();
+      expect($scope.words[0].wordBody).toBe('My word');
+    });
 
   });
 });

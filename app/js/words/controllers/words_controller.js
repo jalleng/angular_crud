@@ -1,5 +1,5 @@
 module.exports = function(app) {
-  app.controller('WordsController', ['$scope', 'Resource', '$http', function($scope, Resource, $http) {
+  app.controller('WordsController', ['$scope', 'Resource', function($scope, Resource) {
     $scope.words = [];
     $scope.newWord = {};
     var wordResource = Resource('words');
@@ -42,16 +42,6 @@ module.exports = function(app) {
         word.editing = false;
         if (err) return console.log(err);
       });
-    // };
-      $http.put('/api/words/' + word._id, word)
-        .then(function(res) {
-          delete word.status;
-          word.editing = false;
-        }, function(res) {
-          console.log(res);
-          word.status = 'failed';
-          word.editing = false;
-        });
     };
 
     $scope.removeWord = function(word) {

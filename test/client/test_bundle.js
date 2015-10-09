@@ -102,21 +102,22 @@
 	      expect($scope.newWord).toBe('');
 	    });
 
-	    // it('should remove a word', function() {
-	    //   $scope.words.push({_id: 5, wordBody: 'My word'});
-	    //   $httpBackend.expectDELETE('/api/words/5').respond(200);
-	    //   $scope.removeWord($scope.words[0]);
-	    //   $httpBackend.flush();
-	    //   expect($scope.words.length).toBe(0);
-	    // });
+	    it('should remove a word', function() {
+	      $scope.words.push({_id: 5, wordBody: 'My word'});
+	      $httpBackend.expectDELETE('/api/words/5').respond(200);
+	      $scope.removeWord($scope.words[0]);
+	      $httpBackend.flush();
+	      expect($scope.words.length).toBe(0);
+	    });
 
-	    // it('should update a word', function() {
-	    //   $scope.words.push({_id: 5, wordBody: 'My word'});
-	    //   $httpBackend.expectPUT('/api/words/5', {_id: 5, wordBody: 'My word', status: 'pending'}).respond(200);
-	    //   $scope.saveWord($scope.words[0]);
-	    //   $httpBackend.flush();
-	    //   expect($scope.words[0].wordBody).toBe('My word');
-	    // });
+	    it('should update a word', function() {
+	      $scope.words.push({_id: 6, wordBody: 'My word'});
+	      console.log('words', $scope.words);
+	      $httpBackend.expectPUT('/api/words/6', {_id: 6, wordBody: 'My word', status: 'pending'}).respond(200);
+	      $scope.saveWord($scope.words[0]);
+	      $httpBackend.flush();
+	      expect($scope.words[0].wordBody).toBe('My word');
+	    });
 
 	  });
 	});
@@ -29087,7 +29088,7 @@
 /***/ function(module, exports) {
 
 	module.exports = function(app) {
-	  app.controller('WordsController', ['$scope', 'Resource', '$http', function($scope, Resource, $http) {
+	  app.controller('WordsController', ['$scope', 'Resource', function($scope, Resource) {
 	    $scope.words = [];
 	    $scope.newWord = {};
 	    var wordResource = Resource('words');
@@ -29130,16 +29131,6 @@
 	        word.editing = false;
 	        if (err) return console.log(err);
 	      });
-	    // };
-	      $http.put('/api/words/' + word._id, word)
-	        .then(function(res) {
-	          delete word.status;
-	          word.editing = false;
-	        }, function(res) {
-	          console.log(res);
-	          word.status = 'failed';
-	          word.editing = false;
-	        });
 	    };
 
 	    $scope.removeWord = function(word) {
