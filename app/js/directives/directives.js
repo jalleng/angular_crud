@@ -1,4 +1,4 @@
 module.exports = function(app) {
-  //require('./dummy_directive')(app);
+  require('./style_directive')(app);
   require('./bobsled_directive')(app);
 };

@@ -24,7 +24,7 @@ gulp.task('webpack:test', function() {
 });
 
 gulp.task('staticfiles:dev', function() {
-  return gulp.src('./app/**/*.html')
+  return gulp.src(['./app/**/*.html', './app/**/*.css'])
     .pipe(gulp.dest('build/'))
 });
 
@@ -47,9 +47,9 @@ gulp.task('karmatests', ['webpack:test'], function(done) {
   }, done).start();
 });
 
-// gulp.task('watch', function() {
-//   return gulp.watch(['./app/js/client.js', './app/**/*.html'], ['build:dev']);
-// });
+gulp.task('watch', function() {
+  return gulp.watch(['./app/js/client.js', './app/**/*.html'], ['build:dev']);
+});
 
 
 gulp.task('build:dev', ['staticfiles:dev', 'webpack:dev']);

@@ -45,7 +45,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1);
-	__webpack_require__(12);
+	__webpack_require__(13);
 
 
 /***/ },
@@ -53,7 +53,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(2);
-	__webpack_require__(11);
+	__webpack_require__(12);
 
 	describe('words controller', function() {
 	  var $httpBackend;
@@ -128,25 +128,15 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(3);
-	//require('angular-route');
 
 	var angular = window.angular;
 	var wordsApp = angular.module('wordsApp', []);
 
 	__webpack_require__(4)(wordsApp);
 	__webpack_require__(6)(wordsApp);
-	__webpack_require__(8)(wordsApp);
+	__webpack_require__(9)(wordsApp);
 
-	// wordsApp.config(['$routeProvider', function($route){
-	//   $route
-	//     .when('/words', {
-	//       templateURL:'/templates/words/views/words_view.html',
-	//       controller:'WordsController'
-	//     })
-	//     .otherwise({
-	//       redirestcTo: '/words'
-	//     });
-	// }]);
+
 
 
 
@@ -29047,13 +29037,31 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(app) {
-	  //require('./dummy_directive')(app);
 	  __webpack_require__(7)(app);
+	  __webpack_require__(8)(app);
 	};
 
 
 /***/ },
 /* 7 */
+/***/ function(module, exports) {
+
+	module.exports = function(app) {
+	  app.directive('style', function() {
+	    return {
+	      restrict: 'AC',
+	      templateUrl: '/templates/directives/style_template.html',
+	      transclude: true,
+	      scope: {
+	        title: '@'
+	      },
+	    }
+	  });
+	};
+
+
+/***/ },
+/* 8 */
 /***/ function(module, exports) {
 
 	module.exports = function(app) {
@@ -29074,17 +29082,17 @@
 
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(app) {
-	  __webpack_require__(9)(app);
 	  __webpack_require__(10)(app);
+	  __webpack_require__(11)(app);
 	};
 
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports) {
 
 	module.exports = function(app) {
@@ -29145,7 +29153,7 @@
 
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports) {
 
 	module.exports = function(app) {
@@ -29169,7 +29177,7 @@
 
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports) {
 
 	/**
@@ -31645,7 +31653,7 @@
 
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(2);
