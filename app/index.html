@@ -6,35 +6,9 @@
     <link type="text/css" rel="stylesheet" href="angular_crud.css"/>
   </head>
   <body data-ng-app="wordsApp" >
-    <main data-ng-controller="WordsController" data-ng-init="getAll()">
-      <div data-bobsled title="Words App">
-        {{description}}
-      </div>
-
-      <div data-word-form save="createWord(word)"
-           data-word="newWord"
-           data-label-text="New Word"
-           data-button-text="Create Word">
-      </div>
-
-      <ul id="wordslist">
-        <li class="{{word.status}}" data-ng-repeat="word in words">
-          <span data-ng-if="!word.editing">{{word.wordBody}}
-            <button data-ng-click="beginUpdate(word)">Edit</button>
-            <button data-ng-click="removeWord(word)">Delete</button>
-          </span>
-
-          <div data-word-form
-               data-ng-if="word.editing"
-               data-label-text="Edit Word"
-               data-button-text="Save Changes"
-               data-word="word"
-               data-save="saveWord(word)">
-          </div>
-          <button type="button" data-ng-if="word.editing" data-ng-click="cancelUpdate(word)">Cancel</button>
-        </li>
-      </ul>
-
+    <a data-ng-if="loggedIn()" href data-ng-click="logOut()">Log Out{{username? ' of ' + username : ''}}</a>
+    <h1>Inside the App</h1>
+    <main data-ng-view>
     </main>
     <script src="bundle.js"></script>
   </body>

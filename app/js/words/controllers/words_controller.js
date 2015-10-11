@@ -1,5 +1,11 @@
 module.exports = function(app) {
-  app.controller('WordsController', ['$scope', 'Resource', function($scope, Resource) {
+  app.controller('WordsController', ['$scope', 'Resource', '$http', '$cookies', '$location', function($scope, Resource, $http, $cookies, $location) {
+
+    var eat = $cookies.get('eat');
+    if (!(eat && eat.length))
+      $location.path('/signup');
+
+    $http.defaults.headers.common.token = eat;
     $scope.words = [];
     $scope.newWord = {};
     var wordResource = Resource('words');
