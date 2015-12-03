@@ -30,7 +30,7 @@ wordsRoute.put('/words/:id', jsonParser,  function(req, res) {
   });
 });
 
-wordsRoute.delete('/words/:id',jsonParser, function(req, res) {
+wordsRoute.delete('/words/:id', function(req, res) {
   Word.remove({_id: req.params.id}, function(err) {
     if (err) return handleError(err, res);
     res.json({msg: 'success'});
