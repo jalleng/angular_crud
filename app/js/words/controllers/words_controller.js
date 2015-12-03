@@ -1,26 +1,35 @@
-'use strict';
-
 module.exports = function(app) {
-  app.controller('WordsController', ['$scope', '$http', function($scope, $http) {
+  app.controller('WordsController', ['$scope', 'Resource', '$http', '$cookies', '$location', function($scope, Resource, $http, $cookies, $location) {
+
+    var eat = $cookies.get('eat');
+    if (!(eat && eat.length))
+      $location.path('/signup');
+
+    $http.defaults.headers.common.token = eat;
     $scope.words = [];
+    $scope.newWord = {};
+    var wordResource = Resource('words');
+    $scope.description = 'An app that collects words! How Fun!';
+
+    $scope.printDescription = function(description) {
+      console.log('from the function: ' + description);
+      console.log('from $scope: ' + $scope.description);
+    };
 
     $scope.getAll = function() {
-      $http.get('/api/words')
-        .then(function(res) {
-          $scope.words = res.data;
-        }, function(res) {
-          console.log(res);
-        });
+      wordResource.getAll(function(err, data) {
+        if (err) return console.log(err);
+        $scope.words = data;
+      });
     };
 
     $scope.createWord = function(word) {
-      $http.post('/api/words', word)
-        .then(function(res) {
-          $scope.words.push(res.data);
-          $scope.newWord = null;
-        }, function(res) {
-          console.log(res);
-        });
+      wordResource.create(word, function(err, data) {
+        if(err) return console.log(err);
+        $scope.newWord = '';
+        $scope.words.push(data);
+
+      });
     };
 
     $scope.beginUpdate = function(word) {
@@ -30,30 +39,23 @@ module.exports = function(app) {
 
     $scope.cancelUpdate = function(word) {
       word.wordBody = word.old;
+      word.editing = false;
     };
 
     $scope.saveWord = function(word) {
       word.status = 'pending';
-      $http.put('/api/words/' + word._id, word)
-        .then(function(res) {
-          delete word.status;
-          word.editing = false;
-        }, function(res) {
-          console.log(res);
-          word.status = 'failed';
-          word.editing = false;
-        });
+      wordResource.update(word, function(err) {
+        word.editing = false;
+        if (err) return console.log(err);
+      });
     };
 
     $scope.removeWord = function(word) {
       word.status = 'pending';
-      $http.delete('/api/words/' + word._id)
-        .then(function() {
-          $scope.words.splice($scope.words.indexOf(word), 1);
-        }, function(res) {
-          word.status = 'failed';
-          console.log(res);
-        });
+      wordResource.remove(word, function(err) {
+        if (err) return console.log(err);
+        $scope.words.splice($scope.words.indexOf(word), 1);
+      });
     };
   }]);
 };
