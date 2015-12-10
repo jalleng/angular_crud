@@ -44,19 +44,16 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
 	__webpack_require__(1);
+	__webpack_require__(13);
 
 
 /***/ },
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
 	__webpack_require__(2);
-	__webpack_require__(6);
+	__webpack_require__(12);
 
 	describe('words controller', function() {
 	  var $httpBackend;
@@ -102,7 +99,7 @@
 	      $scope.createWord({wordBody: 'send a test word'});
 	      $httpBackend.flush();
 	      expect($scope.words[0].wordBody).toBe('test word');
-	      expect($scope.newWord).toBe(null);
+	      expect($scope.newWord).toBe('');
 	    });
 
 	    it('should remove a word', function() {
@@ -114,8 +111,9 @@
 	    });
 
 	    it('should update a word', function() {
-	      $scope.words.push({_id: 5, wordBody: 'My word'});
-	      $httpBackend.expectPUT('/api/words/5', {_id: 5, wordBody: 'My word', status: 'pending'}).respond(200);
+	      $scope.words.push({_id: 6, wordBody: 'My word'});
+	      console.log('words', $scope.words);
+	      $httpBackend.expectPUT('/api/words/6', {_id: 6, wordBody: 'My word', status: 'pending'}).respond(200);
 	      $scope.saveWord($scope.words[0]);
 	      $httpBackend.flush();
 	      expect($scope.words[0].wordBody).toBe('My word');
@@ -129,12 +127,14 @@
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
 	__webpack_require__(3);
 
+	var angular = window.angular;
 	var wordsApp = angular.module('wordsApp', []);
+
 	__webpack_require__(4)(wordsApp);
+	__webpack_require__(6)(wordsApp);
+	__webpack_require__(9)(wordsApp);
 
 
 
@@ -28978,7 +28978,6 @@
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
 	module.exports = function(app) {
 	  __webpack_require__(5)(app);
 	};
@@ -28988,29 +28987,140 @@
 /* 5 */
 /***/ function(module, exports) {
 
-	'use strict';
+	var handleSuccess = function(callback) {
+	  return function(res) {
+	    callback(null, res.data);
+	  };
+	};
+
+	var handleFailure = function(callback) {
+	  return function(data) {
+	    callback(data);
+	  };
+	};
 
 	module.exports = function(app) {
-	  app.controller('WordsController', ['$scope', '$http', function($scope, $http) {
+	  app.factory('Resource', ['$http', function($http) {
+	    var Resource = function(resourceName) {
+	      this.resourceName = resourceName;
+	    };
+
+	    Resource.prototype.create = function(resource, callback) {
+	      $http.post('/api/' + this.resourceName, resource)
+	        .then(handleSuccess(callback), handleFailure(callback));
+	    };
+
+	    Resource.prototype.getAll = function(callback) {
+	      $http.get('/api/' + this.resourceName)
+	        .then(handleSuccess(callback), handleFailure(callback));
+	    };
+
+	    Resource.prototype.update = function(resource, callback) {
+	      $http.put('/api/' + this.resourceName + '/' + resource._id, resource)
+	        .then(handleSuccess(callback), handleFailure(callback));
+	    };
+
+	    Resource.prototype.remove = function(resource, callback) {
+	      $http.delete('/api/' + this.resourceName + '/' + resource._id)
+	        .then(handleSuccess(callback), handleFailure(callback));
+	    };
+
+	    return function(resourceName) {
+	      return new Resource(resourceName);
+	    };
+	  }]);
+	};
+
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function(app) {
+	  __webpack_require__(7)(app);
+	  __webpack_require__(8)(app);
+	};
+
+
+/***/ },
+/* 7 */
+/***/ function(module, exports) {
+
+	module.exports = function(app) {
+	  app.directive('style', function() {
+	    return {
+	      restrict: 'AC',
+	      templateUrl: '/templates/directives/style_template.html',
+	      transclude: true,
+	      scope: {
+	        title: '@'
+	      },
+	    }
+	  });
+	};
+
+
+/***/ },
+/* 8 */
+/***/ function(module, exports) {
+
+	module.exports = function(app) {
+	  app.directive('bobsled', function() {
+	    return {
+	      restrict: 'AC',
+	      templateUrl: '/templates/directives/bobsled_directive_template.html',
+	      transclude: true,
+	      scope: {
+	        title: '@'
+	      },
+	      controller: function($scope) {
+	        $scope.description= 'cool runnings, bobsled';
+	      }
+	    }
+	  });
+	};
+
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function(app) {
+	  __webpack_require__(10)(app);
+	  __webpack_require__(11)(app);
+	};
+
+
+/***/ },
+/* 10 */
+/***/ function(module, exports) {
+
+	module.exports = function(app) {
+	  app.controller('WordsController', ['$scope', 'Resource', function($scope, Resource) {
 	    $scope.words = [];
+	    $scope.newWord = {};
+	    var wordResource = Resource('words');
+	    $scope.description = 'An app that collects words! How Fun!';
+
+	    $scope.printDescription = function(description) {
+	      console.log('from the function: ' + description);
+	      console.log('from $scope: ' + $scope.description);
+	    };
 
 	    $scope.getAll = function() {
-	      $http.get('/api/words')
-	        .then(function(res) {
-	          $scope.words = res.data;
-	        }, function(res) {
-	          console.log(res);
-	        });
+	      wordResource.getAll(function(err, data) {
+	        if (err) return console.log(err);
+	        $scope.words = data;
+	      });
 	    };
 
 	    $scope.createWord = function(word) {
-	      $http.post('/api/words', word)
-	        .then(function(res) {
-	          $scope.words.push(res.data);
-	          $scope.newWord = null;
-	        }, function(res) {
-	          console.log(res);
-	        });
+	      wordResource.create(word, function(err, data) {
+	        if(err) return console.log(err);
+	        $scope.newWord = '';
+	        $scope.words.push(data);
+
+	      });
 	    };
 
 	    $scope.beginUpdate = function(word) {
@@ -29025,33 +29135,49 @@
 
 	    $scope.saveWord = function(word) {
 	      word.status = 'pending';
-	      $http.put('/api/words/' + word._id, word)
-	        .then(function(res) {
-	          delete word.status;
-	          word.editing = false;
-	        }, function(res) {
-	          console.log(res);
-	          word.status = 'failed';
-	          word.editing = false;
-	        });
+	      wordResource.update(word, function(err) {
+	        word.editing = false;
+	        if (err) return console.log(err);
+	      });
 	    };
 
 	    $scope.removeWord = function(word) {
 	      word.status = 'pending';
-	      $http.delete('/api/words/' + word._id)
-	        .then(function() {
-	          $scope.words.splice($scope.words.indexOf(word), 1);
-	        }, function(res) {
-	          word.status = 'failed';
-	          console.log(res);
-	        });
+	      wordResource.remove(word, function(err) {
+	        if (err) return console.log(err);
+	        $scope.words.splice($scope.words.indexOf(word), 1);
+	      });
 	    };
 	  }]);
 	};
 
 
 /***/ },
-/* 6 */
+/* 11 */
+/***/ function(module, exports) {
+
+	module.exports = function(app) {
+	  app.directive('wordForm', function() {
+	    return {
+	      restrict: 'AC',
+	      replace: true,
+	      templateUrl: '/templates/words/directives/word_form_template.html',
+	      scope: {
+	        labelText: '@',
+	        buttonText: '@',
+	        word: '=',
+	        save: '&'
+	      },
+	      controller: function($scope) {
+	        console.log($scope.save);
+	      }
+	    }
+	  });
+	};
+
+
+/***/ },
+/* 12 */
 /***/ function(module, exports) {
 
 	/**
@@ -31524,6 +31650,40 @@
 
 
 	})(window, window.angular);
+
+
+/***/ },
+/* 13 */
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(2);
+
+	describe('resource service', function() {
+	  beforeEach(angular.mock.module('wordsApp'));
+
+	  var ResourceService;
+	  var $httpBackend;
+	  var wordsResource;
+	  beforeEach(angular.mock.inject(function(Resource, _$httpBackend_) {
+	    ResourceService = Resource;
+	    $httpBackend = _$httpBackend_;
+	    wordsResource = ResourceService('words');
+	  }));
+
+	  afterEach(function() {
+	    $httpBackend.verifyNoOutstandingExpectation();
+	    $httpBackend.verifyNoOutstandingRequest();
+	  });
+
+	  it('should make a get request', function() {
+	    $httpBackend.expectGET('/api/words').respond(200, [{wordBody: 'test word', _id: 1}]);
+	    wordsResource.getAll(function(err, data) {
+	      expect(err).toBe(null);
+	      expect(Array.isArray(data)).toBe(true);
+	    });
+	    $httpBackend.flush();
+	  });
+	});
 
 
 /***/ }

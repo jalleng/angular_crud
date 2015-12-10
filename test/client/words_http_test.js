@@ -1,5 +1,3 @@
-'use strict';
-
 require(__dirname + '/../../app/js/client');
 require('angular-mocks');
 
@@ -47,7 +45,7 @@ describe('words controller', function() {
       $scope.createWord({wordBody: 'send a test word'});
       $httpBackend.flush();
       expect($scope.words[0].wordBody).toBe('test word');
-      expect($scope.newWord).toBe(null);
+      expect($scope.newWord).toBe('');
     });
 
     it('should remove a word', function() {
@@ -59,8 +57,9 @@ describe('words controller', function() {
     });
 
     it('should update a word', function() {
-      $scope.words.push({_id: 5, wordBody: 'My word'});
-      $httpBackend.expectPUT('/api/words/5', {_id: 5, wordBody: 'My word', status: 'pending'}).respond(200);
+      $scope.words.push({_id: 6, wordBody: 'My word'});
+      console.log('words', $scope.words);
+      $httpBackend.expectPUT('/api/words/6', {_id: 6, wordBody: 'My word', status: 'pending'}).respond(200);
       $scope.saveWord($scope.words[0]);
       $httpBackend.flush();
       expect($scope.words[0].wordBody).toBe('My word');

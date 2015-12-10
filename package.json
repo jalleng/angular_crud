@@ -2,7 +2,7 @@
   "name": "angulur_crud",
   "version": "0.1.0",
   "description": "angular_crud_practice",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha test"
   },
@@ -25,7 +25,10 @@
   },
   "devDependencies": {
     "angular": "^1.4.6",
-    "angular-mocks":"^1.4.7",
+    "angular-base64": "^2.0.5",
+    "angular-cookies": "^1.4.7",
+    "angular-mocks": "^1.4.7",
+    "angular-route": "^1.4.7",
     "chai": "^3.2.0",
     "chai-http": "^1.0.0",
     "gulp": "^3.9.0",
