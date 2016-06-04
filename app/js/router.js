@@ -1,8 +1,10 @@
+'use strict';
+
 module.exports = function(wordsApp) {
   wordsApp.config(['$routeProvider', function($route) {
     $route
       .when('/words', {
-        templateUrl: '/templates/words/views/words_view.html',
+        templateUrl: '/templates/words/views/words_view.html'
       })
       .when('/signup', {
         templateUrl: '/templates/users/views/signupin_view.html',
@@ -10,7 +12,7 @@ module.exports = function(wordsApp) {
       })
       .when('/signin', {
         templateUrl: '/templates/users/views/signupin_view.html',
-        controller: "SigninController"
+        controller: 'SigninController'
       })
       .otherwise({
         redirectTo: '/signup'

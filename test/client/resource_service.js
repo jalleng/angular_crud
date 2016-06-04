@@ -1,3 +1,5 @@
+'use strict';
+
 require('../../app/js/client');
 
 describe('resource service', function() {

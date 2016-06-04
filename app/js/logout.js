@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = function(app) {
   app.run(['$rootScope', '$cookies', '$location', '$http', function($scope, $cookies, $location, $http) {
     $scope.loggedIn = function() {
@@ -14,7 +16,6 @@ module.exports = function(app) {
       var eat = $cookies.get('eat');
       if (!(eat && eat.length))
         callback(new Error('not logged in'));
-
       $http({
         method: 'GET',
         url: '/api/username',
@@ -22,14 +23,14 @@ module.exports = function(app) {
           token: eat
         }
       })
-        .then(function(res) {
-          $scope.username = res.data.username;
-        }, function(res) {
-          callback(res);
-        });
+      .then(function(res) {
+        $scope.username = res.data.username;
+      }, function(res) {
+        callback(res);
+      });
     };
 
     if ($scope.loggedIn())
       $scope.getUserName();
-  }])
+  }]);
 };

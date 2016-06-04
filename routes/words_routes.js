@@ -1,8 +1,10 @@
+'use strict';
+
 var Word = require(__dirname + '/../models/word');
 var express = require('express');
 var jsonParser = require('body-parser').json();
 var handleError = require(__dirname + '/../lib/handle_error');
-var eatAuth = require(__dirname + '/../lib/eat_Auth')
+var eatAuth = require(__dirname + '/../lib/eat_Auth');
 
 var wordsRoute = module.exports = exports = express.Router();
 
@@ -13,8 +15,9 @@ wordsRoute.get('/words', jsonParser, eatAuth, function(req, res) {
   });
 });
 
-wordsRoute.post('/words', jsonParser, function(req, res) {
+wordsRoute.post('/words', jsonParser, eatAuth, function(req, res) {
   var newWord = new Word(req.body);
+  newWord.author = req.user.username;
   newWord.save(function(err, data) {
     if (err) handleError(err, res);
     res.json(data);

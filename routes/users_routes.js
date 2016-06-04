@@ -1,3 +1,5 @@
+'use strict';
+
 var express = require('express');
 var User = require(__dirname + '/../models/user');
 var jsonParser = require('body-parser').json();
@@ -15,23 +17,22 @@ usersRouter.post('/signup', jsonParser, function(req, res) {
 
   newUser.basic.username = req.body.username;
   newUser.username = req.body.username;
-  console.log("username", req.body.username)
   newUser.generateHash(req.body.password, function(err, hash) {
-    if (err) return res.send("wat?")
-      routeEvents.emit("hash", hash);
+    if (err) return res.send('can not generate hash');
+    routeEvents.emit('hash', hash);
   });
 
-  routeEvents.on("hash", function(hash) {
+  routeEvents.on('hash', function(hash) {
     newUser.save(function(err, data) {
-      if (err) return res.send("this broke")
-        routeEvents.emit("save", data);
+      if (err) return res.send('can not save');
+      routeEvents.emit('save', data);
     });
   });
 
-  routeEvents.on("save", function(data) {
+  routeEvents.on('save', function(data) {
     newUser.generateToken(function(err, token) {
-      if (err) return res.send("lulwat")
-        res.json({token: token});
+      if (err) return res.send('can not generate token');
+      res.json({token: token});
     });
   });
 });
@@ -40,25 +41,25 @@ usersRouter.get('/signin', httpBasic, function(req, res) {
   User.findOne({'basic.username': req.auth.username}, function(err, user) {
     if (err) return handleError(err, res);
     if (!user) {
-      return res.status(401).json({msg: 'Meow1! Could not authenticat!'});
-    };
-    routeEvents.emit("findOne", user);
+      return res.status(401).json({msg: 'Could not authenticate'});
+    }
+    routeEvents.emit('findOne', user);
   });
 
-  routeEvents.on("findOne", function(user) {
+  routeEvents.on('findOne', function(user) {
     user.compareHash(req.auth.password, function(err, hashRes) {
       if (err) return handleError(err, res);
       if (!hashRes) {
-        return res.status(401).json({msg: 'Meow2! Could not authenticat!'});
+        return res.status(401).json({msg: 'Could not authenticate'});
       }
-      routeEvents.emit("compare", user);
+      routeEvents.emit('compare', user);
     });
   });
 
-  routeEvents.on("compare", function(user) {
+  routeEvents.on('compare', function(user) {
     user.generateToken(function(err, token) {
       if (err) return handleError(err, res);
-        res.json({token: token});
+      res.json({token: token});
     });
   });
 });

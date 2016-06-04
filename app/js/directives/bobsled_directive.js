@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = function(app) {
   app.directive('bobsled', function() {
     return {
@@ -10,6 +12,6 @@ module.exports = function(app) {
       controller: function($scope) {
         $scope.description= 'cool runnings, bobsled';
       }
-    }
+    };
   });
 };

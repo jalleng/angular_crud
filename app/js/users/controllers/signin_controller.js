@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = function(app) {
   app.controller('SigninController', ['$scope', '$http', '$base64', '$location', '$cookies', function($scope, $http, $base64, $location, $cookies) {
     $scope.buttonText = 'Log In';
@@ -16,13 +18,13 @@ module.exports = function(app) {
           'Authorization': 'Basic ' + $base64.encode(user.username + ':' + user.password)
         }
       })
-        .then(function(res) {
-          $cookies.put('eat', res.data.token);
-          $scope.getUserName();
-          $location.path('/words');
-        }, function(res) {
-          console.log(res);
-        });
+      .then(function(res) {
+        $cookies.put('eat', res.data.token);
+        $scope.getUserName();
+        $location.path('/words');
+      }, function(res) {
+        console.log(res);
+      });
     };
   }]);
 };

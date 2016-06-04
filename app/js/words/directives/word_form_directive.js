@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = function(app) {
   app.directive('wordForm', function() {
     return {
@@ -13,6 +15,6 @@ module.exports = function(app) {
       controller: function($scope) {
         console.log($scope.save);
       }
-    }
+    };
   });
 };

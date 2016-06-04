@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = function(app) {
   app.controller('SignupController', ['$scope', '$http', '$location', '$cookies', function($scope, $http, $location, $cookies) {
     $scope.buttonText = 'Create A New User';
@@ -19,13 +21,13 @@ module.exports = function(app) {
 
     $scope.sendToServer = function(user) {
       $http.post('/api/signup', user)
-        .then(function(res) {
-          $cookies.put('eat', res.data.token);
-          $scope.getUserName();
-          $location.path('/words');
-        }, function(res) {
-          console.log(res);
-        });
+      .then(function(res) {
+        $cookies.put('eat', res.data.token);
+        $scope.getUserName();
+        $location.path('/words');
+      }, function(res) {
+        console.log(res);
+      });
     };
   }]);
 };

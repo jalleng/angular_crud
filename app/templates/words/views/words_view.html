@@ -2,20 +2,17 @@
   <div data-bobsled title="Words App">
     {{description}}
   </div>
-
   <div data-word-form save="createWord(word)"
        data-word="newWord"
        data-label-text="New Word"
        data-button-text="Create Word">
   </div>
-
   <ul id="wordslist">
     <li class="{{word.status}}" data-ng-repeat="word in words">
       <span data-ng-if="!word.editing">{{word.wordBody}}
         <button data-ng-click="beginUpdate(word)">Edit</button>
         <button data-ng-click="removeWord(word)">Delete</button>
       </span>
-
       <div data-word-form
            data-ng-if="word.editing"
            data-label-text="Edit Word"

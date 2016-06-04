@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = function(app) {
   app.directive('style', function() {
     return {
@@ -6,7 +8,7 @@ module.exports = function(app) {
       transclude: true,
       scope: {
         title: '@'
-      },
-    }
+      }
+    };
   });
 };

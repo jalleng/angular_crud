@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = function(app) {
   app.controller('WordsController', ['$scope', 'Resource', '$http', '$cookies', '$location', function($scope, Resource, $http, $cookies, $location) {
 
@@ -28,7 +30,6 @@ module.exports = function(app) {
         if(err) return console.log(err);
         $scope.newWord = '';
         $scope.words.push(data);
-
       });
     };
 

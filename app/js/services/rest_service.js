@@ -1,3 +1,5 @@
+'use strict';
+
 var handleSuccess = function(callback) {
   return function(res) {
     callback(null, res.data);

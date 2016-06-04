@@ -1,3 +1,4 @@
+'use strict';
 
 var chai = require('chai');
 var chaiHttp = require('chai-http');
@@ -9,9 +10,6 @@ var mongoose = require('mongoose');
 var url = 'localhost:3000/api';
 var Word = require(__dirname + '/../models/word');
 var User = require(__dirname + '/../models/user');
-var eatauth = require(__dirname + '/../lib/eat_auth');
-var EE = require('events').EventEmitter;
-var routeEvents = new EE();
 
 
 describe('the words resource', function() {
@@ -41,42 +39,23 @@ describe('the words resource', function() {
 
   it('should be able to get words', function(done) {
     chai.request(url)
-      .get('/words')
-      .end(function(err, res) {
-        expect(err).to.eql(null);
-        expect(Array.isArray(res.body)).to.eql(true);
-        done();
-      });
+    .get('/words')
+    .send({token: this.token})
+    .end(function(err, res) {
+      expect(err).to.eql(null);
+      expect(Array.isArray(res.body)).to.eql(true);
+      done();
+    });
   });
 
   it('should be able to create a word', function(done) {
     chai.request(url)
-      .post('/words')
-      .send({wordBody: 'test word', token: this.token})
-      .end(function(err, res) {
-        expect(err).to.eql(null);
-        expect(res.body.wordBody).to.eql('test word');
-        expect(res.body.author).to.eql('test');
-        done();
-      });
-  });
-
-  it('should post a new language to the language collection', function(done) {
-    chai.request(url)
-      .post('/languages')
-      .send({languageBody: 'Spanish', token: this.token})
-      .end(function(err, res) {
-        expect(err).to.eql(null);
-        expect(res.body.languageBody).to.eql('Spanish');
-        expect(res.body.author).to.eql('test');
-        done();
-      });
-  });
-
-  it('should check for language validation', function(done) {
-    var myWord = new Word({ language: 'jibberjabber'});
-    myWord.save(function (err) {
-      expect(err.errors.language.value).to.eql('jibberjabber');
+    .post('/words')
+    .send({wordBody: 'test word', token: this.token})
+    .end(function(err, res) {
+      expect(err).to.eql(null);
+      expect(res.body.wordBody).to.eql('test word');
+      expect(res.body.author).to.eql('test');
       done();
     });
   });
@@ -93,24 +72,24 @@ describe('the words resource', function() {
 
     it('should be able to update a word', function(done) {
       chai.request(url)
-        .put('/words/' + this.testWord._id)
-        .send({wordBody: 'new wordBody', token: this.token})
-        .end(function(err, res) {
-          expect(err).to.eql(null);
-          expect(res.body.msg).to.eql('success');
-          done();
-        });
+      .put('/words/' + this.testWord._id)
+      .send({wordBody: 'new wordBody', token: this.token})
+      .end(function(err, res) {
+        expect(err).to.eql(null);
+        expect(res.body.msg).to.eql('success');
+        done();
+      });
     });
 
     it('should be able to delete a word', function(done) {
       chai.request(url)
-        .delete('/words/' + this.testWord._id)
-        .set('token', this.token)
-        .end(function(err, res) {
-          expect(err).to.eql(null);
-          expect(res.body.msg).to.eql('success');
-          done();
-        });
+      .delete('/words/' + this.testWord._id)
+      .set('token', this.token)
+      .end(function(err, res) {
+        expect(err).to.eql(null);
+        expect(res.body.msg).to.eql('success');
+        done();
+      });
     });
   });
 });
